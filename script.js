@@ -2,9 +2,8 @@ let debugText = document.getElementById("debug");
 
 function setup() {
     collideDebug(true);
-    createCanvas(500, 500)
-    background(255)
-    // debugText.textContent = ""
+    createCanvas(500, 500);
+    background(255);
 }
 
 var hit = false;
@@ -15,12 +14,22 @@ let lines = [
     {x: 400, y: 200}
 ]
 
-function draw() {
-    stroke(color('black'))
-    lines.forEach(({x, y}) => {
-        line(x, y, lineCenter.x, lineCenter.y)
-    })
+// Return True iff point at (testX,testY) is colliding with either line
+function didHit(testX, testY){
+    return lines
+        .some(({x,y}) => collidePointLine(testX, testY, x, y, lineCenter.x, lineCenter.y));
+}
 
-    // No buffer zone, most standard example:
-    // hit = collidePointPoint(100, 100, mouseX, mouseY);
+function draw() {
+    // Reset debug text
+    debugText.textContent = "";
+
+    // Draw lines
+    stroke(color('black'));
+    lines.forEach(({x, y}) => {
+        line(x, y, lineCenter.x, lineCenter.y);
+    })
+    hit = didHit(mouseX, mouseY);
+    
+    if(hit) debugText.textContent = "Hit!"
 }
