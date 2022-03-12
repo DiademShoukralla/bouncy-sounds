@@ -30,14 +30,15 @@ function setup() {
  *  */
 function didHit(inVec){
     for(let i=0; i<lines.length; i++){
-        if(collidePointLineVector(inVec, lines[i], lineCenter)) return lines[i];
+        if(collidePointLineVector(inVec, lines[i], lineCenter)) return lines[i].copy();
     }
     return null
 }
 
 function draw() {
-    // Reset debug text
-    debugText.textContent = "";
+    // Reset debug text and background
+    background(255);
+    // debugText.textContent = "";
 
     // Draw lines
     stroke(color('black'));
@@ -52,10 +53,13 @@ function draw() {
     })
 
     // Calculate hit
-    hit = didHit(createVector(mouseX, mouseY));
+    let mouse = createVector(mouseX, mouseY)
+    hit = didHit(mouse);
     // update based on hit
     if(hit) {
-        debugText.textContent = "Hit!"
-        
+        let before = mouse.heading()
+        mouse.reflect(hit)
+        let after = mouse.heading()
+        debugText.textContent = `${before}, ${after}`
     }
 }
