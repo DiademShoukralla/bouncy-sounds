@@ -10,8 +10,13 @@ var hit = false;
 
 let lineCenter = {x: 250, y: 400}
 let lines = [
-    {x: 100, y: 200},
-    {x: 400, y: 200}
+    {x: 50, y: 150},
+    {x: 450, y: 150}
+]
+
+let ballRadius = 15;
+let balls = [
+    {x: 100, y: 50, dir: 180}
 ]
 
 // Return True iff point at (testX,testY) is colliding with either line
@@ -29,7 +34,15 @@ function draw() {
     lines.forEach(({x, y}) => {
         line(x, y, lineCenter.x, lineCenter.y);
     })
+
+    // Draw balls
+    balls.forEach(({x,y}) => {
+        circle(x, y, ballRadius)
+        // Test draw the next one
+    })
+
+    // Calculate hit
     hit = didHit(mouseX, mouseY);
-    
+    // update based on hit
     if(hit) debugText.textContent = "Hit!"
 }
