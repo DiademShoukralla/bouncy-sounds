@@ -22,7 +22,7 @@ function setup() {
 
     lineCenter = createVector(lineCenterPos.x, lineCenterPos.y)
     lines = linePos.map(({x, y}) => createVector(x, y));
-    balls = ballPos.map(({x,y}) => ({pos: createVector(x, y), dir: 180}))
+    balls = ballPos.map(({x,y}) => ({pos: createVector(x, y), dir: Math.PI}))
 }
 
 /**
@@ -46,10 +46,13 @@ function draw() {
         line(lineVec.x, lineVec.y, lineCenter.x, lineCenter.y);
     })
 
-    // Draw balls
-    balls.forEach(({pos}) => {
+    // Process balls
+    balls.forEach(({pos, dir}, i) => {
+        // Draw ball, current position
         circle(pos.x, pos.y, ballRadius)
-        // Test draw the next one
+        // update ball pos for next draw
+        let deltaVec = createVector(0, -11).normalize().rotate(dir)
+        pos.add(deltaVec)
     })
 
     // Calculate hit
