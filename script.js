@@ -15,6 +15,8 @@ let ballPos = [
 ]
 let balls
 
+let gravity
+
 function setup() {
     collideDebug(true);
     createCanvas(500, 500);
@@ -22,7 +24,8 @@ function setup() {
 
     lineCenter = createVector(lineCenterPos.x, lineCenterPos.y)
     lines = linePos.map(({x, y}) => createVector(x, y));
-    balls = ballPos.map(({x,y}) => ({pos: createVector(x, y), dir: 0}))
+    balls = ballPos.map(({x,y}) => ({pos: createVector(x, y), vel: createVector(0, 1)}))
+    gravity = createVector(0, 0.5);
 }
 
 /**
@@ -47,16 +50,16 @@ function draw() {
     })
 
     // Process balls
-    balls.forEach(({pos, dir}, i) => {
+    balls.forEach(({pos, vel}) => {
         // Draw ball, current position
         circle(pos.x, pos.y, ballRadius);
         // update ball pos for next draw
-        let deltaVec = createVector(0, 1).normalize().rotate(dir);
-        pos.add(deltaVec);
+        pos.add(vel);
+        vel.add(gravity)
 
         // check if hit
         hit = didHit(pos);
         // update based on hit
-        if(hit) balls[i].dir = pos.copy().reflect(hit).heading();
+        if(hit) vel.setHeading(vel.angleBetween(hit));
     })
 }
